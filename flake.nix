@@ -6,7 +6,7 @@
 
   outputs = inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" "aarch64-linux" ];
+      systems = [ "aarch64-linux" ];
       flake = rec {
         nixosConfigurations.rk3588s = inputs.nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
