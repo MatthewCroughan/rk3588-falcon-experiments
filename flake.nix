@@ -8,6 +8,7 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "aarch64-linux" ];
       flake = rec {
+        herculesCI.ciSystems = [ "aarch64-linux" ];
         nixosConfigurations.rk3588s = inputs.nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
           modules = [
