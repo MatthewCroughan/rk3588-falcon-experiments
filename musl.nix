@@ -30,7 +30,7 @@ in
   nixpkgs.overlays = [
     (self: super: {
       qemu = glibcPkgs.qemu;
-#      diffutils = super.diffutils.overrideAttrs { doCheck = false; };
+      systemd = (super.systemd.overrideAttrs (old: { patches = old.patches ++ [ ./wchar_t.patch ]; })).override { withEfi = true; withUkify = true; withBootloader = true; };
       move-mount-beneath = super.move-mount-beneath.overrideAttrs (old: {
         patches = old.patches ++ [
           ./move-mount-beneath-musl.patch
@@ -38,7 +38,7 @@ in
       });
     })
   ];
-  environment.corePackages = with pkgs; lib.mkForce [
+  environment.corePackages = with pkgs; [
     acl
     attr
     bashInteractive

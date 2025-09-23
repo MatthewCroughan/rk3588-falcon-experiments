@@ -4,6 +4,7 @@
     ./repart.nix
     "${modulesPath}/profiles/perlless.nix"
     "${modulesPath}/profiles/minimal.nix"
+    ./rk3588.nix
   ];
   boot.loader.systemd-boot = {
     enable = true;
@@ -18,5 +19,5 @@
       PasswordAuthentication = true;
     };
   };
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+#  boot.kernelPackages = pkgs.linuxPackages_latest;
 }

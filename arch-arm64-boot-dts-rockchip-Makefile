@@ -1,0 +1,1 @@
+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-rock-5c.dtb

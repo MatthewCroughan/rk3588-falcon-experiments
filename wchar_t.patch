@@ -1,0 +1,45 @@
+diff --git a/src/boot/efi.h b/src/boot/efi.h
+index e1042635b9..58562fced6 100644
+--- a/src/boot/efi.h
++++ b/src/boot/efi.h
+@@ -1,6 +1,10 @@
+ /* SPDX-License-Identifier: LGPL-2.1-or-later */
+ #pragma once
+ 
++#if SD_BOOT
++#define __DEFINED_wchar_t 1
++#endif
++
+ #include <stdarg.h>
+ #include <stdbool.h>
+ #include <stddef.h>
+diff --git a/src/fundamental/macro-fundamental.h b/src/fundamental/macro-fundamental.h
+index 35758b5b18..ecf951c234 100644
+--- a/src/fundamental/macro-fundamental.h
++++ b/src/fundamental/macro-fundamental.h
+@@ -5,6 +5,10 @@
+ #  include <assert.h>
+ #endif
+ 
++#if SD_BOOT
++#  define __DEFINED_wchar_t 1
++#endif
++
+ #include <limits.h>
+ #include <stdalign.h>
+ #include <stdbool.h>
+diff --git a/src/fundamental/memory-util-fundamental.h b/src/fundamental/memory-util-fundamental.h
+index 6870f54f58..41e0fbf5b8 100644
+--- a/src/fundamental/memory-util-fundamental.h
++++ b/src/fundamental/memory-util-fundamental.h
+@@ -1,6 +1,10 @@
+ /* SPDX-License-Identifier: LGPL-2.1-or-later */
+ #pragma once
+ 
++#if SD_BOOT
++#  include "efi.h"
++#endif
++
+ #include <stddef.h>
+ 
+ #if SD_BOOT

@@ -6,7 +6,7 @@
 
   outputs = inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "aarch64-linux" ];
+      systems = [ "x86_64-linux" "aarch64-linux" ];
       flake = rec {
         nixosConfigurations.rk3588s = inputs.nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
@@ -40,6 +40,29 @@
       };
       perSystem = { config, self', inputs', pkgs, system, ... }: {
         packages = {
+          flash-rk3588 =
+            let
+              spl = pkgs.fetchurl {
+                url = "https://dl.radxa.com/rock5/sw/images/loader/rock-5b/release/rk3588_spl_loader_v1.15.113.bin";
+                hash = "sha256-JrqrcOa5FTZPfXPYgpg2bbG/w0bjRoPpXT0RtSSSBH8=";
+              };
+              decompressedImage = pkgs.runCommand "cm5-lite-io-board-image-decompressed" {} ''
+                ${pkgs.zstd}/bin/zstdcat ${inputs.self.packages.aarch64-linux.rk3588s-musl-llvm-image}/*.zst > $out
+              '';
+              program = pkgs.writeShellScriptBin "flash-cm5" ''
+                PATH=${pkgs.lib.makeBinPath (with pkgs; [ rkdeveloptool mktemp coreutils ])}
+                TMPDIR=$(mktemp -d)
+                echo "Please use your fingers to put the board into maskrom mode"
+                echo "Flashing the image from ${decompressedImage}"
+                until rkdeveloptool db ${spl}
+                do
+                  echo "Waiting for device to accept SPL loader... retrying in 1 second"
+                  sleep 1
+                done
+                rkdeveloptool wl 0 ${decompressedImage}
+                rkdeveloptool rd
+              '';
+            in program;
           uboot = pkgs.callPackage ./uboot.nix {};
           rk3588s-image = inputs.self.nixosConfigurations.rk3588s.config.system.build.image.overrideAttrs {
             preInstall = ''

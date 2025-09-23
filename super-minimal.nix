@@ -2,6 +2,7 @@
   modulesPath,
   pkgs,
   lib,
+  config,
   ...
 }:
 {
@@ -70,7 +71,7 @@
       };
       systemd = super.systemd.override {
         withAcl = false;
-        withAnalyze = true;
+        withAnalyze = false;
         withApparmor = false;
         withAudit = false;
         withCoredump = false;
@@ -105,14 +106,14 @@
         #nice
         withKmod = false;
         # Needed
-        withPam = true;
+        withPam = false;
         withCompression = true;
-        withLogind = true;
+        withLogind = false;
         withQrencode = false;
         withUkify = false;
-        withEfi = true;
-        withCryptsetup = true;
-        withRepart = true;
+        withEfi = false;
+        withCryptsetup = false;
+        withRepart = false;
         withSysupdate = false;
         withOpenSSL = false;
         withBootloader = false;
@@ -124,4 +125,20 @@
   system.switch.enable = false;
   nix.enable = false;
   boot.loader.systemd-boot.enable = lib.mkForce false;
+  environment.corePackages = lib.mkForce [];
+  boot.initrd.systemd.suppressedUnits = [
+    "systemd-logind.service"
+    "systemd-user-sessions.service"
+    "dbus-org.freedesktop.login1.service"
+  ];
+  systemd.suppressedSystemUnits = [
+    "systemd-logind.service"
+    "systemd-user-sessions.service"
+    "dbus-org.freedesktop.login1.service"
+  ];
+  boot.initrd.systemd.suppressedStorePaths = [
+    "${config.systemd.package}/example/systemd/system/systemd-logind.service"
+    "${config.systemd.package}/example/systemd/system/systemd-user-sessions.service"
+    "${config.systemd.package}/example/systemd/system/dbus-org.freedesktop.login1.service"
+  ];
 }
