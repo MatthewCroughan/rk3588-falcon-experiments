@@ -30,7 +30,6 @@ in
   nixpkgs.overlays = [
     (self: super: {
       qemu = glibcPkgs.qemu;
-      systemd = (super.systemd.overrideAttrs (old: { patches = old.patches ++ [ ./wchar_t.patch ]; })).override { withEfi = true; withUkify = true; withBootloader = true; };
       move-mount-beneath = super.move-mount-beneath.overrideAttrs (old: {
         patches = old.patches ++ [
           ./move-mount-beneath-musl.patch
