@@ -6,7 +6,7 @@
 
   outputs = inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "aarch64-linux" ];
+      systems = [ "x86_64-linux" "aarch64-linux" ];
       flake = rec {
         herculesCI.ciSystems = [ "aarch64-linux" ];
         nixosConfigurations.rk3588s = inputs.nixpkgs.lib.nixosSystem {
@@ -47,8 +47,8 @@
                 url = "https://dl.radxa.com/rock5/sw/images/loader/rock-5b/release/rk3588_spl_loader_v1.15.113.bin";
                 hash = "sha256-JrqrcOa5FTZPfXPYgpg2bbG/w0bjRoPpXT0RtSSSBH8=";
               };
-              decompressedImage = pkgs.runCommand "cm5-lite-io-board-image-decompressed" {} ''
-                ${pkgs.zstd}/bin/zstdcat ${inputs.self.packages.aarch64-linux.rk3588s-musl-llvm-image}/*.zst > $out
+              decompressedImage = pkgs.runCommand "rk3588-image-decompressed" {} ''
+                ${pkgs.zstd}/bin/zstdcat ${inputs.self.packages.aarch64-linux.rk3588s-musl-image}/*.zst > $out
               '';
               program = pkgs.writeShellScriptBin "flash-cm5" ''
                 PATH=${pkgs.lib.makeBinPath (with pkgs; [ rkdeveloptool mktemp coreutils ])}

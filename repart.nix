@@ -20,6 +20,7 @@ in
   fileSystems."/boot".fsType = "vfat";
   image.repart = {
     name = "image";
+    package = pkgs.buildPackages.systemdMinimal.override { withEfi = true; withBootloader = true; withRepart = true; withCryptsetup = true; };
     compression.enable = true;
     partitions = {
       "10-uboot-padding" = {

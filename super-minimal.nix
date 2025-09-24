@@ -58,10 +58,18 @@
     (self: super: {
       util-linux = super.util-linux.override {
         systemdSupport = false;
+        pamSupport = false;
         cryptsetupSupport = false;
         nlsSupport = false;
         ncursesSupport = false;
+        sqlite = null;
       };
+      #util-linux = super.util-linux.override {
+      #  systemdSupport = false;
+      #  cryptsetupSupport = false;
+      #  nlsSupport = false;
+      #  ncursesSupport = false;
+      #};
       coreutils-full = self.coreutils;
       dbus = super.dbus.override {
         x11Support = false;
@@ -69,61 +77,62 @@
       wireplumber = super.wireplumber.override {
         enableGI = false;
       };
-      systemd = super.systemd.override {
-        withAcl = false;
-        withAnalyze = false;
-        withApparmor = false;
-        withAudit = false;
-        withCoredump = false;
-        withDocumentation = false;
-        withFido2 = false;
-        withGcrypt = false;
-        withHostnamed = false;
-        withHomed = false;
-        withHwdb = false;
-        withImportd = false;
-        withLibBPF = false;
-        withLibidn2 = false;
-        withLocaled = false;
-        withMachined = false;
-        withNetworkd = false;
-        withNss = false;
-        withOomd = false;
-        withPCRE2 = false;
-        withPolkit = false;
-        withPortabled = false;
-        withRemote = false;
-        withResolved = false;
-        withShellCompletions = false;
-        withSysusers = false;
-        withTimedated = false;
-        withTimesyncd = false;
-        withTpm2Tss = false;
-        withUserDb = false;
-        withPasswordQuality = false;
-        withVmspawn = false;
-        withLibarchive = false;
-        #nice
-        withKmod = false;
-        # Needed
-        withPam = false;
-        withCompression = true;
-        withLogind = false;
-        withQrencode = false;
-        withUkify = false;
-        withEfi = false;
-        withCryptsetup = false;
-        withRepart = false;
-        withSysupdate = false;
-        withOpenSSL = false;
-        withBootloader = false;
-      };
+#      systemd = super.systemd.override {
+#        withAcl = false;
+#        withAnalyze = false;
+#        withApparmor = false;
+#        withAudit = false;
+#        withCoredump = false;
+#        withDocumentation = false;
+#        withFido2 = false;
+#        withGcrypt = false;
+#        withHostnamed = false;
+#        withHomed = false;
+#        withHwdb = false;
+#        withImportd = false;
+#        withLibBPF = false;
+#        withLibidn2 = false;
+#        withLocaled = false;
+#        withMachined = false;
+#        withNetworkd = false;
+#        withNss = false;
+#        withOomd = false;
+#        withPCRE2 = false;
+#        withPolkit = false;
+#        withPortabled = false;
+#        withRemote = false;
+#        withResolved = false;
+#        withShellCompletions = false;
+#        withSysusers = false;
+#        withTimedated = false;
+#        withTimesyncd = false;
+#        withTpm2Tss = false;
+#        withUserDb = false;
+#        withPasswordQuality = false;
+#        withVmspawn = false;
+#        withLibarchive = false;
+#        #nice
+#        withKmod = false;
+#        # Needed
+#        withPam = false;
+#        withCompression = true;
+#        withLogind = false;
+#        withQrencode = false;
+#        withUkify = false;
+#        withEfi = false;
+#        withCryptsetup = false;
+#        withRepart = false;
+#        withSysupdate = false;
+#        withOpenSSL = false;
+#        withBootloader = false;
+#      };
     })
   ];
   systemd.coredump.enable = false;
   systemd.repart.enable = false;
   system.switch.enable = false;
   nix.enable = false;
+  networking.firewall.enable = false;
   boot.loader.systemd-boot.enable = lib.mkForce false;
   environment.corePackages = lib.mkForce [];
   boot.initrd.systemd.suppressedUnits = [
