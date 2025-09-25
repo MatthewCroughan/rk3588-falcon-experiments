@@ -11,10 +11,12 @@ in
     disableInstallerTools = lib.mkForce false;
     tools.nixos-option.enable = lib.mkForce false;
   };
+  services.dbus.implementation = "broker";
   boot.loader.systemd-boot.enable = lib.mkForce false;
   nix.enable = lib.mkForce false;
   nixpkgs.overlays = [
     (self: super: {
+      dbus = super.dbus.overrideAttrs (old: { configureFlags = old.configureFlags ++ [ "--disable-libaudit" "--disable-apparmor" ]; });
       libcap = super.libcap.override { withGo = false; };
       netbsd = super.netbsd.overrideScope (
         _final: prev: {

@@ -6,7 +6,7 @@ in
 {
   imports = [
     ./kmod-issue.nix # Failed to initialize kmod context: Not supported
-    ./super-minimal.nix
+#    ./super-minimal.nix
   ];
   services.nscd.enableNsncd = false;
   services.nscd.enable = false;
@@ -35,55 +35,6 @@ in
         withBootloader = true;
         withEfi = true;
       };
-      systemd = (super.systemd.override {
-        kbd = self.kbd.overrideAttrs { unpackPhase = "mkdir -p {$out/bin,$dev,$man,$scripts}; touch $out/bin/{loadkeys,setfont}; exit 0"; };
-        coreutils = self.runCommandNoCC "neutered" { } "mkdir -p $out";
-        withUkify = false;
-        withRepart = false;
-        withCryptsetup = false;
-        withEfi = false;
-        withBootloader = false;
-
-        withAcl = false;
-        withAnalyze = false;
-        withApparmor = false;
-        withAudit = false;
-        withCompression = false;
-        withCoredump = false;
-        withDocumentation = false;
-        withFido2 = false;
-        withGcrypt = false;
-        withHostnamed = false;
-        withHomed = false;
-        withHwdb = false;
-        withImportd = false;
-        withLibBPF = false;
-        withLibidn2 = false;
-        withLocaled = false;
-        withLogind = false;
-        withMachined = false;
-        withNetworkd = false;
-        withNss = false;
-        withOomd = false;
-        withOpenSSL = false;
-        withPCRE2 = false;
-        withPam = false;
-        withPolkit = false;
-        withPortabled = false;
-        withRemote = false;
-        withResolved = false;
-        withShellCompletions = false;
-        withSysupdate = false;
-        withSysusers = false;
-        withTimedated = false;
-        withTimesyncd = false;
-        withTpm2Tss = false;
-        withUserDb = false;
-        withPasswordQuality = false;
-        withVmspawn = false;
-        withQrencode = false;
-        withLibarchive = false;
-      });
       move-mount-beneath = super.move-mount-beneath.overrideAttrs (old: {
         patches = old.patches ++ [
           ./move-mount-beneath-musl.patch

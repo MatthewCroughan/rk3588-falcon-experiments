@@ -20,16 +20,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1758667129,
-        "narHash": "sha256-WbI6qoF5bbveBVTueheiQOUnM0zZU7KgedpKOAzsSwY=",
-        "owner": "NixOS",
+        "lastModified": 1758805011,
+        "narHash": "sha256-ohIj8H+UmX1Ku8PQRoOXPheLI3Jfb97D8HvMSMwyhCI=",
+        "owner": "matthewcroughan",
         "repo": "nixpkgs",
-        "rev": "be3c62115010e4c483bbabf3187592568e17372c",
+        "rev": "a92063562d094f74165961c9e5d535a05fa4be16",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "master",
+        "owner": "matthewcroughan",
+        "ref": "bashless-staging",
         "repo": "nixpkgs",
         "type": "github"
       }

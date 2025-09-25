@@ -1,7 +1,7 @@
 {
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
-    nixpkgs.url = "github:NixOS/nixpkgs/master";
+    nixpkgs.url = "github:matthewcroughan/nixpkgs/bashless-staging";
   };
 
   outputs = inputs@{ flake-parts, ... }:

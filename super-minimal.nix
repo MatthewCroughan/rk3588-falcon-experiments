@@ -9,6 +9,7 @@
   imports = [
     "${modulesPath}/profiles/perlless.nix"
     "${modulesPath}/profiles/minimal.nix"
+    ./bashless.nix
   ];
   networking.dhcpcd.enable = false;
   fonts.fontconfig.enable = false;
@@ -43,33 +44,28 @@
 #  boot.kernelModules = lib.mkForce [ ];
 #  boot.initrd.kernelModules = lib.mkForce [ ];
 
-  # Maybe in the end..
-  # environment.systemPackages = lib.mkForce [ ];
-
-  # Can save 1MB by disabling console
-  # console.enable = false;
+  services.fstrim.enable = lib.mkForce false;
 
   boot.hardwareScan = false;
 
   boot.enableContainers = false;
   networking.resolvconf.enable = false;
 
+  security.pam.services.login.updateWtmp = lib.mkForce false;
+
   nixpkgs.overlays = [
     (self: super: {
+      # prevent runtime reference to bash when cross-compiling
+      gnugrep = super.gnugrep.override { runtimeShellPackage = self.runCommandNoCC "neutered" { } "mkdir -p $out"; };
+
       util-linux = super.util-linux.override {
         systemdSupport = false;
         pamSupport = false;
         cryptsetupSupport = false;
         nlsSupport = false;
         ncursesSupport = false;
-        sqlite = null;
+        withLastlog = false;
       };
-      #util-linux = super.util-linux.override {
-      #  systemdSupport = false;
-      #  cryptsetupSupport = false;
-      #  nlsSupport = false;
-      #  ncursesSupport = false;
-      #};
       coreutils-full = self.coreutils;
       dbus = super.dbus.override {
         x11Support = false;
@@ -77,55 +73,55 @@
       wireplumber = super.wireplumber.override {
         enableGI = false;
       };
-#      systemd = super.systemd.override {
-#        withAcl = false;
-#        withAnalyze = false;
-#        withApparmor = false;
-#        withAudit = false;
-#        withCoredump = false;
-#        withDocumentation = false;
-#        withFido2 = false;
-#        withGcrypt = false;
-#        withHostnamed = false;
-#        withHomed = false;
-#        withHwdb = false;
-#        withImportd = false;
-#        withLibBPF = false;
-#        withLibidn2 = false;
-#        withLocaled = false;
-#        withMachined = false;
-#        withNetworkd = false;
-#        withNss = false;
-#        withOomd = false;
-#        withPCRE2 = false;
-#        withPolkit = false;
-#        withPortabled = false;
-#        withRemote = false;
-#        withResolved = false;
-#        withShellCompletions = false;
-#        withSysusers = false;
-#        withTimedated = false;
-#        withTimesyncd = false;
-#        withTpm2Tss = false;
-#        withUserDb = false;
-#        withPasswordQuality = false;
-#        withVmspawn = false;
-#        withLibarchive = false;
-#        #nice
-#        withKmod = false;
-#        # Needed
-#        withPam = false;
-#        withCompression = true;
-#        withLogind = false;
-#        withQrencode = false;
-#        withUkify = false;
-#        withEfi = false;
-#        withCryptsetup = false;
-#        withRepart = false;
-#        withSysupdate = false;
-#        withOpenSSL = false;
-#        withBootloader = false;
-#      };
+      systemd = (super.systemd.override {
+        kbd = self.kbd.overrideAttrs { unpackPhase = "mkdir -p {$out/bin,$dev,$man,$scripts}; touch $out/bin/{loadkeys,setfont}; exit 0"; };
+        coreutils = self.runCommandNoCC "neutered" { } "mkdir -p $out";
+        withUkify = false;
+        withRepart = false;
+        withCryptsetup = false;
+        withEfi = false;
+        withBootloader = false;
+
+        withAcl = false;
+        withAnalyze = false;
+        withApparmor = false;
+        withAudit = false;
+        withCompression = false;
+        withCoredump = false;
+        withDocumentation = false;
+        withFido2 = false;
+        withGcrypt = false;
+        withHostnamed = false;
+        withHomed = false;
+        withHwdb = false;
+        withImportd = false;
+        withLibBPF = false;
+        withLibidn2 = false;
+        withLocaled = false;
+        withLogind = false;
+        withMachined = false;
+        withNetworkd = false;
+        withNss = false;
+        withOomd = false;
+        withOpenSSL = false;
+        withPCRE2 = false;
+        withPam = false;
+        withPolkit = false;
+        withPortabled = false;
+        withRemote = false;
+        withResolved = false;
+        withShellCompletions = false;
+        withSysupdate = false;
+        withSysusers = false;
+        withTimedated = false;
+        withTimesyncd = false;
+        withTpm2Tss = false;
+        withUserDb = false;
+        withPasswordQuality = false;
+        withVmspawn = false;
+        withQrencode = false;
+        withLibarchive = false;
+      });
     })
   ];
   systemd.coredump.enable = false;

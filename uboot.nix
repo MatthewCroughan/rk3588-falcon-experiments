@@ -10,7 +10,7 @@ buildUBoot {
   patches = [];
   version = "master";
   extraConfig = ''
-    CONFIG_BOOTDELAY=1
+    CONFIG_BOOTDELAY=0
   '';
   extraMeta.platforms = [ "aarch64-linux" ];
   BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
