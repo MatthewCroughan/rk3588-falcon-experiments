@@ -7,6 +7,7 @@ in
   imports = [
     ./kmod-issue.nix # Failed to initialize kmod context: Not supported
 #    ./super-minimal.nix
+#    ./interactionless.nix
   ];
   services.nscd.enableNsncd = false;
   services.nscd.enable = false;
@@ -30,16 +31,23 @@ in
   nixpkgs.overlays = [
     (self: super: {
       qemu = glibcPkgs.qemu;
+      pam = super.pam.override { withAudit = false; };
+      diffutils = super.diffutils.overrideAttrs (old: {
+        patches = (old.patches or []) ++ [
+          ./musl-diffutils.patch
+        ];
+      });
       systemdUkify = self.systemd.override {
         withUkify = true;
         withBootloader = true;
         withEfi = true;
+        withAudit = false;
       };
-      move-mount-beneath = super.move-mount-beneath.overrideAttrs (old: {
-        patches = old.patches ++ [
-          ./move-mount-beneath-musl.patch
-        ];
-      });
+      #move-mount-beneath = super.move-mount-beneath.overrideAttrs (old: {
+      #  patches = old.patches ++ [
+      #    ./move-mount-beneath-musl.patch
+      #  ];
+      #});
     })
   ];
   environment.corePackages = with pkgs; [
