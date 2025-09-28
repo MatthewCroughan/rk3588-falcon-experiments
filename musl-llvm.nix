@@ -16,6 +16,9 @@ in
   nix.enable = lib.mkForce false;
   nixpkgs.overlays = [
     (self: super: {
+      # Prevents accidental runtime linkage to llvm bintools
+      gnugrep = super.gnugrep.override { runtimeShellPackage = self.runCommandNoCC "neutered" { } "mkdir -p $out"; };
+
       dbus = super.dbus.overrideAttrs (old: { configureFlags = old.configureFlags ++ [ "--disable-libaudit" "--disable-apparmor" ]; });
       libcap = super.libcap.override { withGo = false; };
       netbsd = super.netbsd.overrideScope (

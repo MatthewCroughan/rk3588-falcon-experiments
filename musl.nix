@@ -31,12 +31,14 @@ in
   nixpkgs.overlays = [
     (self: super: {
       qemu = glibcPkgs.qemu;
+#      go-md2man = super.go-md2man.overrideAttrs { doCheck = false; };
+#      gitMinimal = super.gitMinimal.overrideAttrs { doCheck = false; };
       pam = super.pam.override { withAudit = false; };
-      diffutils = super.diffutils.overrideAttrs (old: {
-        patches = (old.patches or []) ++ [
-          ./musl-diffutils.patch
-        ];
-      });
+      #diffutils = super.diffutils.overrideAttrs (old: {
+      #  patches = (old.patches or []) ++ [
+      #    ./musl-diffutils.patch
+      #  ];
+      #});
       systemdUkify = self.systemd.override {
         withUkify = true;
         withBootloader = true;

@@ -57,7 +57,6 @@
     (self: super: {
       # prevent runtime reference to bash when cross-compiling
       gnugrep = super.gnugrep.override { runtimeShellPackage = self.runCommandNoCC "neutered" { } "mkdir -p $out"; };
-
       util-linux = super.util-linux.override {
         systemdSupport = false;
         pamSupport = false;
@@ -67,9 +66,11 @@
         withLastlog = false;
       };
       coreutils-full = self.coreutils;
-      dbus = super.dbus.override {
-        x11Support = false;
-      };
+      dbus = (super.dbus.overrideAttrs (old: {
+        configureFlags = (lib.remove "--enable-libaudit" old.configureFlags) ++ [
+        ];
+        buildInputs = (lib.remove super.audit old.buildInputs);
+      })).override { x11Support = false; };
       wireplumber = super.wireplumber.override {
         enableGI = false;
       };

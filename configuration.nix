@@ -1,9 +1,9 @@
 { modulesPath, lib, pkgs, ... }:
 {
   imports = [
-    ./repart.nix
     "${modulesPath}/profiles/perlless.nix"
     "${modulesPath}/profiles/minimal.nix"
+    ./repart.nix
     ./rk3588.nix
   ];
   boot.loader.systemd-boot = {
