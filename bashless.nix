@@ -1,11 +1,10 @@
 { lib, ... }:
 
 {
-
   # Remove bash from activation
   system.nixos-init.enable = lib.mkForce true;
   system.activatable = lib.mkForce false;
-  environment.enableShell = lib.mkForce false;
+  environment.shell.enable = lib.mkForce false;
   programs.bash.enable = lib.mkForce false;
 
   # Random bash remnants
@@ -18,7 +17,6 @@
   # autovt depends on bash
   console.enable = lib.mkForce false;
   # dhcpcd and openresolv depend on bash
-#  networking.useNetworkd = lib.mkForce true;
   # bcache tools depend on bash.
   boot.bcache.enable = lib.mkForce false;
   # iptables depends on bash and nixos-firewall-tool is a bash script
@@ -38,12 +36,10 @@
 
   # Check that the system does not contain a Nix store path that contains the
   # string "bash".
-  #system.forbiddenDependenciesRegexes = [ "bash" ];
-  #services.udev.path = lib.mkForce [];
+  system.forbiddenDependenciesRegexes = [ "bash" ];
+
   services.udev.packages = lib.mkForce [];
-  #boot.initrd.services.udev = {
-  #  packages = lib.mkForce [];
-  #};
+
   boot.kernelParams = [ "systemd.journald.forward_to_kmsg=1" "loglevel=8" ];
 }
 

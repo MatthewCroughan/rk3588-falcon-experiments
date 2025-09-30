@@ -6,8 +6,8 @@ in
 {
   imports = [
     ./kmod-issue.nix # Failed to initialize kmod context: Not supported
-#    ./super-minimal.nix
-#    ./interactionless.nix
+    ./super-minimal.nix
+    ./interactionless.nix
   ];
   services.nscd.enableNsncd = false;
   services.nscd.enable = false;
@@ -31,7 +31,8 @@ in
   nixpkgs.overlays = [
     (self: super: {
       qemu = glibcPkgs.qemu;
-#      go-md2man = super.go-md2man.overrideAttrs { doCheck = false; };
+      git = super.git.overrideAttrs { doInstallCheck = false; };
+      go-md2man = super.go-md2man.overrideAttrs { doCheck = false; };
 #      gitMinimal = super.gitMinimal.overrideAttrs { doCheck = false; };
       pam = super.pam.override { withAudit = false; };
       #diffutils = super.diffutils.overrideAttrs (old: {

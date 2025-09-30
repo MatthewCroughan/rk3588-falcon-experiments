@@ -19,7 +19,18 @@
           modules = [
             ./musl.nix
             {
-              nixpkgs.crossSystem = {
+              nixpkgs.buildPlatform = (inputs.nixpkgs.lib.systems.elaborate "aarch64-unknown-linux-gnu");
+              nixpkgs.hostPlatform = inputs.nixpkgs.lib.recursiveUpdate (inputs.nixpkgs.lib.systems.elaborate "aarch64-unknown-linux-musl") {
+                linux-kernel = {
+                  name = "aarch64-multiplatform";
+                  baseConfig = "tinyconfig";
+                  DTB = true;
+                  extraConfig = "";
+                  autoModules = false;
+                  preferBuiltin = true;
+                  target = "vmlinuz.efi";
+                  installTarget = "zinstall";
+                };
                 config = "aarch64-unknown-linux-musl";
               };
             }
@@ -31,6 +42,16 @@
             {
               nixpkgs.buildPlatform = (inputs.nixpkgs.lib.systems.elaborate "aarch64-unknown-linux-gnu");
               nixpkgs.hostPlatform = inputs.nixpkgs.lib.recursiveUpdate (inputs.nixpkgs.lib.systems.elaborate "aarch64-unknown-linux-musl") {
+                linux-kernel = {
+                  name = "aarch64-multiplatform";
+                  baseConfig = "tinyconfig";
+                  DTB = true;
+                  extraConfig = "";
+                  autoModules = false;
+                  preferBuiltin = true;
+                  target = "vmlinuz.efi";
+                  installTarget = "zinstall";
+                };
                 useLLVM = true;
                 linker = "lld";
                 config = "aarch64-unknown-linux-musl";

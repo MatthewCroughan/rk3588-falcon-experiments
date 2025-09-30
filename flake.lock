@@ -20,11 +20,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1759060692,
-        "narHash": "sha256-ZEmnuBuTWwOn4Et8Q+/maIrvUS0h1iTAeB7XOoLZCUc=",
+        "lastModified": 1759150418,
+        "narHash": "sha256-9JxsFLJ9JektLjxsjOV465G2mgvqMTOhQgTUV5tMcPQ=",
         "owner": "matthewcroughan",
         "repo": "nixpkgs",
-        "rev": "959287b6161849a7c975ec244d133cdfdb95ea69",
+        "rev": "5f4bfdd9ab1561a463402da0948cae4e0d7f7266",
         "type": "github"
       },
       "original": {

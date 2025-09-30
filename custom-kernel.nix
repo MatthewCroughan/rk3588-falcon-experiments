@@ -8,12 +8,11 @@
   postPatch = old.postPatch + ''
     cp ${./arch-arm64-boot-dts-rockchip-Makefile} arch/arm64/boot/dts/rockchip/Makefile
   '';
-
-  #postInstall = ''
-  #  mkdir -p $out/lib/modules/"$version"
-  #  touch  $out/lib/modules/"$version"/modules.order
-  #  touch  $out/lib/modules/"$version"/modules.builtin
-  #  rm $out/System.map
-  #'';
+  postInstall = ''
+    mkdir -p $out/lib/modules/"$version"
+    touch  $out/lib/modules/"$version"/modules.order
+    touch  $out/lib/modules/"$version"/modules.builtin
+    rm $out/System.map
+  '';
   passthru = old.passthru // { features = { efiBootStub = true; }; };
 })
