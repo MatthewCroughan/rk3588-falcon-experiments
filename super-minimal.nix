@@ -9,7 +9,6 @@
   imports = [
     "${modulesPath}/profiles/perlless.nix"
     "${modulesPath}/profiles/minimal.nix"
-    ./bashless.nix
   ];
   networking.dhcpcd.enable = false;
   fonts.fontconfig.enable = false;
@@ -46,7 +45,7 @@
 
   services.fstrim.enable = lib.mkForce false;
 
-  boot.hardwareScan = false;
+  boot.hardwareScan = lib.mkForce false;
 
   boot.enableContainers = false;
   networking.resolvconf.enable = false;
@@ -147,4 +146,5 @@
     "${config.systemd.package}/example/systemd/system/systemd-user-sessions.service"
     "${config.systemd.package}/example/systemd/system/dbus-org.freedesktop.login1.service"
   ];
+  boot.kernelParams = [ "quiet" "mitigations=off" ];
 }

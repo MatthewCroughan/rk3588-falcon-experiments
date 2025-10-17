@@ -12,7 +12,7 @@ in
   systemd.repart.partitions."store".Type = "root";
   boot.initrd.systemd.enable = true;
 #  boot.initrd.systemd.root = "gpt-auto";
-#  boot.initrd.supportedFilesystems.erofs = true;
+  boot.initrd.supportedFilesystems.erofs = true;
   fileSystems."/nix/store" =
     let
       partConf = config.image.repart.partitions."store".repartConfig;

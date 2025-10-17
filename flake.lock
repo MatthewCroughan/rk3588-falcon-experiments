@@ -5,11 +5,11 @@
         "nixpkgs-lib": "nixpkgs-lib"
       },
       "locked": {
-        "lastModified": 1756770412,
-        "narHash": "sha256-+uWLQZccFHwqpGqr2Yt5VsW/PbeJVTn9Dk6SHWhNRPw=",
+        "lastModified": 1759362264,
+        "narHash": "sha256-wfG0S7pltlYyZTM+qqlhJ7GMw2fTF4mLKCIVhLii/4M=",
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "rev": "4524271976b625a4a605beefd893f270620fd751",
+        "rev": "758cf7296bee11f1706a574c77d072b8a7baa881",
         "type": "github"
       },
       "original": {
@@ -18,18 +18,55 @@
         "type": "github"
       }
     },
-    "nixpkgs": {
+    "flake-parts_2": {
+      "inputs": {
+        "nixpkgs-lib": "nixpkgs-lib_2"
+      },
       "locked": {
-        "lastModified": 1759150418,
-        "narHash": "sha256-9JxsFLJ9JektLjxsjOV465G2mgvqMTOhQgTUV5tMcPQ=",
+        "lastModified": 1759362264,
+        "narHash": "sha256-wfG0S7pltlYyZTM+qqlhJ7GMw2fTF4mLKCIVhLii/4M=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "758cf7296bee11f1706a574c77d072b8a7baa881",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "nixos-musl": {
+      "inputs": {
+        "flake-parts": "flake-parts_2",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1760709555,
+        "narHash": "sha256-Ys5/p0b08tYvwbaje6DNtG/j0kd48lg7Iov4PdxuIWA=",
         "owner": "matthewcroughan",
-        "repo": "nixpkgs",
-        "rev": "5f4bfdd9ab1561a463402da0948cae4e0d7f7266",
+        "repo": "nixos-musl",
+        "rev": "707a0ed330ce20ad6488986c8f7f4eed79c954f4",
         "type": "github"
       },
       "original": {
         "owner": "matthewcroughan",
-        "ref": "bashless-staging",
+        "repo": "nixos-musl",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1760673074,
+        "narHash": "sha256-DbUiOuCunM8aL9YjoZ+KQAVtofCCp0re0VEbOgIRPKI=",
+        "owner": "matthewcroughan",
+        "repo": "nixpkgs",
+        "rev": "d68905ddd899dc654b674a1f5af9992f5b19fa58",
+        "type": "github"
+      },
+      "original": {
+        "owner": "matthewcroughan",
+        "ref": "mc/conditional-glibcsystemdinitrd",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -49,10 +86,25 @@
         "type": "github"
       }
     },
+    "nixpkgs-lib_2": {
+      "locked": {
+        "lastModified": 1754788789,
+        "narHash": "sha256-x2rJ+Ovzq0sCMpgfgGaaqgBSwY+LST+WbZ6TytnT9Rk=",
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "rev": "a73b9c743612e4244d865a2fdee11865283c04e6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "flake-parts": "flake-parts",
-        "nixpkgs": "nixpkgs"
+        "nixos-musl": "nixos-musl"
       }
     }
   },

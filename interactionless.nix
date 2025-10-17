@@ -1,6 +1,9 @@
 # Further minimization, at the cost of being able to interact with the system by any means
 { lib, pkgs, ... }:
 {
+  imports = [
+    ./bashless.nix
+  ];
   # Maybe in the end..
   environment.systemPackages = lib.mkForce [ ];
   # Can save 1MB by disabling console

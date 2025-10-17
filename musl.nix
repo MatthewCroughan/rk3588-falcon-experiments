@@ -60,6 +60,7 @@ in
     bzip2
     coreutils-full
     cpio
+    dfu-util
 #    curl
 #    diffutils
     findutils
@@ -84,4 +85,10 @@ in
     which
     zstd
   ];
+
+  # We use a builtins based kernel with no modules anyway, musl doesn't seem to
+  # support module loading with systemd
+  boot.initrd.availableKernelModules = lib.mkForce [ ];
+  boot.kernelModules = lib.mkForce [ ];
+  boot.initrd.kernelModules = lib.mkForce [ ];
 }

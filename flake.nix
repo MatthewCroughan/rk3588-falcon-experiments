@@ -1,7 +1,7 @@
 {
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
-    nixpkgs.url = "github:matthewcroughan/nixpkgs/bashless-staging";
+    nixpkgs.url = "github:nikstur/nixpkgs/bashless";
   };
 
   outputs = inputs@{ flake-parts, ... }:
@@ -69,7 +69,7 @@
                 hash = "sha256-JrqrcOa5FTZPfXPYgpg2bbG/w0bjRoPpXT0RtSSSBH8=";
               };
               decompressedImage = pkgs.runCommand "rk3588-image-decompressed" {} ''
-                ${pkgs.zstd}/bin/zstdcat ${inputs.self.packages.aarch64-linux.rk3588s-musl-image}/*.zst > $out
+                ${pkgs.zstd}/bin/zstdcat ${inputs.self.packages.aarch64-linux.rk3588s-image}/*.zst > $out
               '';
               program = pkgs.writeShellScriptBin "flash-cm5" ''
                 PATH=${pkgs.lib.makeBinPath (with pkgs; [ rkdeveloptool mktemp coreutils ])}

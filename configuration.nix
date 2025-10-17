@@ -1,10 +1,12 @@
 { modulesPath, lib, pkgs, ... }:
 {
   imports = [
-    "${modulesPath}/profiles/perlless.nix"
-    "${modulesPath}/profiles/minimal.nix"
+#    "${modulesPath}/profiles/perlless.nix"
+#    "${modulesPath}/profiles/minimal.nix"
     ./repart.nix
     ./rk3588.nix
+    ./io-board
+    ./bullshit.nix
   ];
   boot.loader.systemd-boot = {
     enable = true;
