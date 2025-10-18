@@ -5,6 +5,9 @@
   config,
   ...
 }:
+let
+  glibcPkgs = (import pkgs.path { system = pkgs.hostPlatform.system; });
+in
 {
   imports = [
     "${modulesPath}/profiles/perlless.nix"
@@ -56,6 +59,10 @@
     (self: super: {
       # prevent runtime reference to bash when cross-compiling
       gnugrep = super.gnugrep.override { runtimeShellPackage = self.runCommandNoCC "neutered" { } "mkdir -p $out"; };
+
+      # checks fail due to some override in this super-minimal profile
+      go-md2man = glibcPkgs.go-md2man;
+
       util-linux = super.util-linux.override {
         systemdSupport = false;
         pamSupport = false;
