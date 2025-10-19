@@ -94,10 +94,11 @@ in
         configureFlags = (lib.remove "--enable-libaudit" old.configureFlags) ++ [
         ];
         buildInputs = (lib.remove super.audit old.buildInputs);
-      })).override { x11Support = false; };
+      })).override { enableSystemd = false; x11Support = false; };
       systemd = (super.systemd.override {
+        stdenv = super.withCFlags [ "-Os" ] super.stdenv;
         kbd = self.kbd.overrideAttrs { unpackPhase = "mkdir -p {$out/bin,$dev,$man,$scripts}; touch $out/bin/{loadkeys,setfont}; exit 0"; };
-        coreutils = self.runCommandNoCC "neutered" { } "mkdir -p $out";
+        kmod = self.runCommandNoCC "neutered" { } "mkdir -p $out";
         withUkify = false;
         withRepart = false;
         withCryptsetup = false;
