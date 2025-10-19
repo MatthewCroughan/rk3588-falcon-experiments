@@ -5,6 +5,10 @@
 #    ./bashless.nix
 #  ];
   # Maybe in the end..
+
+  environment.etc."shells".enable = false;
+  boot.initrd.systemd.users.nobody.shell = "/bin/sh";
+  boot.initrd.systemd.suppressedStorePaths = [ "${pkgs.shadow}/bin/nologin" ];
   environment.systemPackages = lib.mkForce [ ];
   # Can save 1MB by disabling console
   console.enable = false;
