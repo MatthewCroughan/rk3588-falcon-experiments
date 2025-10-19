@@ -11,11 +11,10 @@
       flake = rec {
         herculesCI.ciSystems = [ "aarch64-linux" ];
         nixosConfigurations.rk3588s =
-          inputs.nixos-musl.nixosConfigurations.gnu-musl.extendModules {
+          inputs.nixos-musl.nixosConfigurations.gnu-musl-llvm.extendModules {
+          specialArgs = { inherit inputs; };
           modules = [
             ./configuration.nix
-            ./super-minimal.nix
-            ./kmod-issue.nix
           ];
         };
         #nixosConfigurations.rk3588s-musl = nixosConfigurations.rk3588s.extendModules {
@@ -63,8 +62,8 @@
         #  ];
         #};
       };
-      #perSystem = { config, self', inputs', pkgs, system, ... }: {
-      #  packages = {
+      perSystem = { config, self', inputs', pkgs, system, ... }: {
+        packages = {
       #    flash-rk3588 =
       #      let
       #        spl = pkgs.fetchurl {
@@ -89,11 +88,11 @@
       #        '';
       #      in program;
       #    uboot = pkgs.callPackage ./uboot.nix {};
-      #    rk3588s-image = inputs.self.nixosConfigurations.rk3588s.config.system.build.image.overrideAttrs {
-      #      preInstall = ''
-      #        dd if=${pkgs.callPackage ./uboot.nix {}}/u-boot-rockchip.bin of=${inputs.self.nixosConfigurations.rk3588s.config.image.baseName}.raw seek=64 conv=notrunc
-      #      '';
-      #    };
+          rk3588s-image = inputs.self.nixosConfigurations.rk3588s.config.system.build.image.overrideAttrs {
+            preInstall = ''
+              dd if=${pkgs.callPackage ./uboot.nix {}}/u-boot-rockchip.bin of=${inputs.self.nixosConfigurations.rk3588s.config.image.baseName}.raw seek=64 conv=notrunc
+            '';
+          };
       #    rk3588s-musl-image = inputs.self.nixosConfigurations.rk3588s-musl.config.system.build.image.overrideAttrs {
       #      preInstall = ''
       #        dd if=${pkgs.callPackage ./uboot.nix {}}/u-boot-rockchip.bin of=${inputs.self.nixosConfigurations.rk3588s.config.image.baseName}.raw seek=64 conv=notrunc
@@ -104,7 +103,7 @@
       #        dd if=${pkgs.callPackage ./uboot.nix {}}/u-boot-rockchip.bin of=${inputs.self.nixosConfigurations.rk3588s.config.image.baseName}.raw seek=64 conv=notrunc
       #      '';
       #    };
-      #  };
-      #};
+        };
+      };
     };
 }

@@ -1,5 +1,6 @@
 { config, lib, ... }:
 {
+  boot.hardwareScan = true;
   nixpkgs.overlays = [
     (self: super: {
       systemd = super.systemd.override { withKmod = false; };

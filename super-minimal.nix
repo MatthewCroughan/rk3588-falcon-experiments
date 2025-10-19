@@ -12,10 +12,14 @@ in
   imports = [
     "${modulesPath}/profiles/perlless.nix"
     "${modulesPath}/profiles/minimal.nix"
+    ./kmod-issue.nix
   ];
+#  services.dbus.implementation = "broker";
   networking.dhcpcd.enable = false;
   fonts.fontconfig.enable = false;
   environment.etc."udev/hwdb.bin".enable = false;
+  services.udev.packages = lib.mkForce [];
+  boot.initrd.services.udev.packages = lib.mkForce [];
   services.timesyncd.enable = false;
   systemd.oomd.enable = false;
   networking.wireless.enable = false;
@@ -41,10 +45,12 @@ in
   boot.bcache.enable = false;
   powerManagement.enable = false;
 
-#  # We use a builtins based kernel with no modules anyway
-#  boot.initrd.availableKernelModules = lib.mkForce [ ];
-#  boot.kernelModules = lib.mkForce [ ];
-#  boot.initrd.kernelModules = lib.mkForce [ ];
+  # We use a builtins based kernel with no modules anyway
+  boot.initrd.availableKernelModules = lib.mkForce [ ];
+  boot.kernelModules = lib.mkForce [ ];
+  boot.initrd.kernelModules = lib.mkForce [ ];
+
+  boot.initrd.services.udev.rules = "";
 
   services.fstrim.enable = lib.mkForce false;
 
@@ -64,22 +70,32 @@ in
       go-md2man = glibcPkgs.go-md2man;
 
       util-linux = super.util-linux.override {
-        systemdSupport = false;
-        pamSupport = false;
+        fetchurl = super.stdenv.fetchurlBoot;
         cryptsetupSupport = false;
         nlsSupport = false;
         ncursesSupport = false;
+        pamSupport = false;
+        shadowSupport = false;
+        systemdSupport = false;
+        translateManpages = false;
         withLastlog = false;
       };
+
+
+#      util-linux = super.util-linux.override {
+#        systemdSupport = false;
+#        pamSupport = false;
+#        cryptsetupSupport = false;
+#        nlsSupport = false;
+#        ncursesSupport = false;
+#        withLastlog = false;
+#      };
       coreutils-full = self.coreutils;
       dbus = (super.dbus.overrideAttrs (old: {
         configureFlags = (lib.remove "--enable-libaudit" old.configureFlags) ++ [
         ];
         buildInputs = (lib.remove super.audit old.buildInputs);
       })).override { x11Support = false; };
-      wireplumber = super.wireplumber.override {
-        enableGI = false;
-      };
       systemd = (super.systemd.override {
         kbd = self.kbd.overrideAttrs { unpackPhase = "mkdir -p {$out/bin,$dev,$man,$scripts}; touch $out/bin/{loadkeys,setfont}; exit 0"; };
         coreutils = self.runCommandNoCC "neutered" { } "mkdir -p $out";
@@ -128,6 +144,12 @@ in
         withVmspawn = false;
         withQrencode = false;
         withLibarchive = false;
+
+        withLibseccomp = false;
+        withKexectools = false;
+        withTests = false;
+        withKmod = false;
+        withKernelInstall = false;
       });
     })
   ];
@@ -136,20 +158,26 @@ in
   system.switch.enable = false;
   nix.enable = false;
   networking.firewall.enable = false;
+#  boot.initrd.systemd.shell.enable = false;
   boot.loader.systemd-boot.enable = lib.mkForce false;
   environment.corePackages = lib.mkForce [];
   boot.initrd.systemd.suppressedUnits = [
     "systemd-logind.service"
     "systemd-user-sessions.service"
     "dbus-org.freedesktop.login1.service"
+    "kmod-static-nodes.service"
+    "systemd-modules-load.service"
   ];
   systemd.suppressedSystemUnits = [
     "systemd-logind.service"
     "systemd-user-sessions.service"
     "dbus-org.freedesktop.login1.service"
+    "kmod-static-nodes.service"
+    "systemd-modules-load.service"
   ];
   boot.initrd.systemd.suppressedStorePaths = [
     "${config.systemd.package}/example/systemd/system/systemd-logind.service"
+    "${config.systemd.package}/lib/systemd/systemd-modules-load"
     "${config.systemd.package}/example/systemd/system/systemd-user-sessions.service"
     "${config.systemd.package}/example/systemd/system/dbus-org.freedesktop.login1.service"
   ];
